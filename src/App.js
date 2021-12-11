@@ -10,19 +10,31 @@ const App = () => {
   const [places, setPlaces] = useState();
   const [coordinates, setCoordinates] = useState({});
   const [bounds, setBounds] = useState(null);
+
   useEffect(() => {
-    // getPlacesData().then((data) => {
-    //   console.log(data);
-    //   setPlaces(data);
-    // });
+    navigator.geolocation.getCurrentPosition(
+      ({ coords: { latitude, longitude } }) => {
+        setCoordinates({ lat: latitude, lng: longitude });
+      }
+    );
   }, []);
+
+  useEffect(() => {
+    if (bounds) {
+      console.log(coordinates);
+      // getPlacesData(bounds.sw, bounds.ne).then((data) => {
+      //   console.log(data);
+      //   setPlaces(data.filter((place) => place.name && place.num_reviews > 0));
+      // });
+    }
+  }, [coordinates, bounds]);
   return (
     <>
       <CssBaseline />
       <Header />
       <Grid container spacing={3} style={{ width: "100%" }}>
         <Grid item xs={12} md={4}>
-          <List />
+          <List places={places} />
         </Grid>
         <Grid item xs={12} md={8}>
           <Map
