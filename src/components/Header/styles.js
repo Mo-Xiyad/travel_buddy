@@ -3,7 +3,8 @@ import { alpha, makeStyles } from "@material-ui/core/styles";
 export default makeStyles((theme) => ({
   background: {
     boxShadow: "none",
-    backgroundColor: "#327da8",
+    // backgroundColor: "#327da8",
+    backgroundColor: "#4db6ac",
   },
   title: {
     display: "none",
