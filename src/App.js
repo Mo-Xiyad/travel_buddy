@@ -53,7 +53,7 @@ const App = () => {
     const lat = autocomplete.getPlace().geometry.location.lat();
     const lng = autocomplete.getPlace().geometry.location.lng();
 
-    // setCoordinates({ lat: lat, lng: lng });
+    setCoordinates({ lat, lng });
   };
 
   return (
