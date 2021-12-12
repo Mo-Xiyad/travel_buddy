@@ -36,7 +36,16 @@ const List = ({
 
   return (
     <div className={classes.container}>
-      <Typography variant="h4">Food & Dining around you</Typography>
+      {type === "restaurants" && (
+        <Typography variant="h4">Food & Dining around you</Typography>
+      )}
+      {type === "hotels" && (
+        <Typography variant="h4">Hotels around you</Typography>
+      )}
+      {type === "Attractions" && (
+        <Typography variant="h4">Attractions around you</Typography>
+      )}
+
       {isLoading ? (
         <div className={classes.loading}>
           <CircularProgress size="5rem" />
