@@ -14,18 +14,16 @@ import useStyles from "./styles.js";
 
 const List = ({
   places,
-  // type,
-  // setType,
-  // rating,
-  // setRating,
   ItemClicked,
   isLoading,
+  type,
+  setType,
+  rating,
+  setRating,
 }) => {
   // creating a react ref == import createRef
   const [elementReferences, setElementReferences] = useState([]);
   const classes = useStyles();
-  const [rating, setRating] = useState();
-  const [type, setType] = useState("restaurants");
 
   useEffect(() => {
     // creating references as many as there are places

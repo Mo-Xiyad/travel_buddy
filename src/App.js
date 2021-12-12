@@ -7,11 +7,15 @@ import { getPlacesData } from "./api";
 // import PlaceDetails from "./components/PlaceDetails/PlaceDetails";
 
 const App = () => {
-  const [places, setPlaces] = useState();
   const [coordinates, setCoordinates] = useState({});
   const [bounds, setBounds] = useState(null);
+  const [filteredPlaces, setFilteredPlaces] = useState([]);
+  // All the state from below should be added to redux later
+  const [places, setPlaces] = useState();
   const [ItemClicked, setItemClicked] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [rating, setRating] = useState();
+  const [type, setType] = useState("restaurants");
 
   useEffect(() => {
     navigator.geolocation.getCurrentPosition(
@@ -22,16 +26,23 @@ const App = () => {
   }, []);
 
   useEffect(() => {
+    const filtered = places?.filter((place) => Number(place.rating) > rating);
+
+    setFilteredPlaces(filtered);
+  }, [rating]);
+
+  useEffect(() => {
     setIsLoading(true);
     if (bounds) {
       console.log(coordinates);
-      // getPlacesData(bounds.sw, bounds.ne).then((data) => {
+      // getPlacesData(type, bounds.sw, bounds.ne).then((data) => {
       //   console.log(data);
       //   setPlaces(data.filter((place) => place.name && place.num_reviews > 0));
+      //   setFilteredPlaces([]);
       //   setIsLoading(false);
       // });
     }
-  }, [coordinates, bounds]);
+  }, [bounds, type]);
   return (
     <>
       <CssBaseline />
@@ -39,16 +50,20 @@ const App = () => {
       <Grid container spacing={3} style={{ width: "100%" }}>
         <Grid item xs={12} md={4}>
           <List
-            places={places}
+            places={filteredPlaces?.length ? filteredPlaces : places}
             ItemClicked={ItemClicked}
             isLoading={isLoading}
+            type={type}
+            setType={setType}
+            rating={rating}
+            setRating={setRating}
           />
         </Grid>
         <Grid item xs={12} md={8}>
           <Map
             coordinates={coordinates}
             setCoordinates={setCoordinates}
-            places={places}
+            places={filteredPlaces?.length ? filteredPlaces : places}
             setBounds={setBounds}
             setItemClicked={setItemClicked}
           />
