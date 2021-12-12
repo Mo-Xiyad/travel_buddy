@@ -7,6 +7,7 @@ export default makeStyles(() => ({
     flexDirection: "column",
     justifyContent: "center",
     width: "100px",
+    backgroundColor: "#e0f7fa",
   },
   mapContainer: {
     height: "85vh",

@@ -12,13 +12,13 @@ const Map = ({
   setCoordinates,
   places,
   setBounds,
-  setChildClicked,
+  setItemClicked,
   weatherData,
 }) => {
   const classes = useStyles();
-  const isMobile = useMediaQuery("(min-width:600px)"); // for mobile devices resize to
+  const isDesktop = useMediaQuery("(min-width:600px)"); // for mobile devices resize to // check if user is on desktop
   // mobile variable is going to set to false if the width of the device is lager than 600px
-  // const coordinates = { lat: 0, lng: 0 };
+
   return (
     <div className={classes.mapContainer}>
       <GoogleMapReact
@@ -27,21 +27,19 @@ const Map = ({
         center={coordinates}
         defaultZoom={14}
         margin={[50, 50, 50, 50]}
-        options={""}
-        onChildClick={""}
-        // options={{
-        //   disableDefaultUI: true,
-        //   zoomControl: true,
-        //   styles: mapStyles,
-        // }}
+        options={{
+          disableDefaultUI: true,
+          zoomControl: true,
+          // styles: mapStyles,
+        }}
         onChange={(e) => {
           // console.log(e);
           setCoordinates({ lat: e.center.lat, lng: e.center.lng });
           setBounds({ ne: e.marginBounds.ne, sw: e.marginBounds.sw });
         }}
-        // onChildClick={(child) => setChildClicked(child)}
+        onChildClick={(child) => setItemClicked(child)}
       >
-        {/* {places.length &&
+        {places?.length &&
           places.map((place, i) => (
             <div
               className={classes.markerContainer}
@@ -49,10 +47,10 @@ const Map = ({
               lng={Number(place.longitude)}
               key={i}
             >
-              {!isMobile ? (
+              {!isDesktop ? ( // check if user is on desktop
                 <LocationOnOutlinedIcon color="primary" fontSize="large" />
               ) : (
-                <Paper elevation={3} className={classes.paper}>
+                <Paper elevation={6} className={classes.paper}>
                   <Typography
                     className={classes.typography}
                     variant="subtitle2"
@@ -68,6 +66,7 @@ const Map = ({
                         ? place.photo.images.large.url
                         : "https://www.foodserviceandhospitality.com/wp-content/uploads/2016/09/Restaurant-Placeholder-001.jpg"
                     }
+                    alt={place.name}
                   />
                   <Rating
                     name="read-only"
@@ -79,7 +78,7 @@ const Map = ({
               )}
             </div>
           ))}
-        {weatherData?.list?.length &&
+        {/* {weatherData?.list?.length &&
           weatherData.list.map((data, i) => (
             <div key={i} lat={data.coord.lat} lng={data.coord.lon}>
               <img
