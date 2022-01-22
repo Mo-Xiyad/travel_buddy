@@ -26,6 +26,31 @@ const App = () => {
     );
   }, []);
 
+  const locationpings = () => {
+    if (window.navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(async function (position) {
+        let lat = position.coords.latitude;
+        let long = position.coords.longitude;
+        try {
+          let response = await fetch(
+            `https://api.opencagedata.com/geocode/v1/json?q=${lat}+${long}&key=${process.env.REACT_APP_OPENCAGEDATA_GEO_CODE_API_KEY}`
+          );
+          if (response.ok) {
+            let data = await response.json();
+            console.log(data.results[0].components);
+            console.log("========>> trying to get location data");
+          }
+        } catch (error) {
+          console.log(error);
+          console.log("========>> trying to get location data");
+        }
+      });
+    }
+  };
+  useEffect(() => {
+    locationpings();
+  });
+
   useEffect(() => {
     const filtered = places?.filter((place) => Number(place.rating) > rating);
 
