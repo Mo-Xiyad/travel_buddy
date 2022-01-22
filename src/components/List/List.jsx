@@ -11,6 +11,7 @@ import {
 
 import PlaceDetails from "../PlaceDetails/PlaceDetails";
 import useStyles from "./styles.js";
+import Loader from "../Loader/Loader";
 
 const List = ({
   places,
@@ -33,6 +34,15 @@ const List = ({
         .map((_, i) => refs[i] || createRef())
     );
   }, [places]);
+
+  // useEffect(() => {
+  //   setTimeout(() => {
+  //     console.log("hell");
+  //   }, 10000);
+  //   return () => {
+  //     console.log("hell YESS");
+  //   };
+  // }, []);
 
   return (
     <div className={classes.container}>

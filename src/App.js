@@ -18,15 +18,42 @@ const App = () => {
 
   const [autocomplete, setAutocomplete] = useState(null);
 
-  useEffect(() => {
-    navigator.geolocation.getCurrentPosition(
-      ({ coords: { latitude, longitude } }) => {
-        setCoordinates({ lat: latitude, lng: longitude });
-      }
+  function getCoords() {
+    return new Promise((resolve, reject) =>
+      navigator.permissions
+        ? // Permission API is implemented
+          navigator.permissions
+            .query({
+              name: "geolocation",
+            })
+            .then((permission) =>
+              // is geolocation granted?
+              permission.state === "granted"
+                ? navigator.geolocation.getCurrentPosition((pos) =>
+                    resolve(pos.coords)
+                  )
+                : resolve(null)
+            )
+        : // Permission API was not implemented
+          reject(
+            new Error(
+              "Location was not on so now the application is searching default location"
+            )
+          )
     );
+  }
+
+  useEffect(() => {
+    getCoords()
+      .then((coords) =>
+        setCoordinates({ lat: coords.latitude, lng: coords.longitude })
+      )
+      .catch(function (e) {
+        setCoordinates({ lat: 59.32932349999999, lng: 18.068580800000007 });
+      });
   }, []);
 
-  const locationpings = () => {
+  const CurrentLocationPing = () => {
     if (window.navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(async function (position) {
         let lat = position.coords.latitude;
@@ -36,9 +63,11 @@ const App = () => {
             `https://api.opencagedata.com/geocode/v1/json?q=${lat}+${long}&key=${process.env.REACT_APP_OPENCAGEDATA_GEO_CODE_API_KEY}`
           );
           if (response.ok) {
+            console.log("BEFORE POSITION");
+            console.log(position);
             let data = await response.json();
             console.log(data.results[0].components);
-            console.log("========>> trying to get location data");
+            console.log("========>> Getting location data with OPENCAGEDATA");
           }
         } catch (error) {
           console.log(error);
@@ -47,22 +76,18 @@ const App = () => {
       });
     }
   };
-  useEffect(() => {
-    locationpings();
-  });
 
   useEffect(() => {
     const filtered = places?.filter((place) => Number(place.rating) > rating);
-
     setFilteredPlaces(filtered);
   }, [rating]);
 
   useEffect(() => {
     setIsLoading(true);
     if (bounds?.sw && bounds?.ne) {
-      console.log(coordinates);
+      // console.log(bounds);
       getPlacesData(type, bounds.sw, bounds.ne).then((data) => {
-        console.log(data);
+        // console.log(data);
         setPlaces(data?.filter((place) => place.name && place.num_reviews > 0));
         setFilteredPlaces([]);
         setIsLoading(false);
@@ -77,7 +102,6 @@ const App = () => {
   const onPlaceChanged = () => {
     const lat = autocomplete.getPlace().geometry.location.lat();
     const lng = autocomplete.getPlace().geometry.location.lng();
-
     setCoordinates({ lat, lng });
   };
 

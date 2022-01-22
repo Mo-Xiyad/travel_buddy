@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import GoogleMapReact from "google-map-react";
 import { Paper, Typography, useMediaQuery } from "@material-ui/core";
 import LocationOnOutlinedIcon from "@material-ui/icons/LocationOnOutlined";
@@ -34,6 +34,8 @@ const Map = ({
           // styles: mapStyles,
         }}
         onChange={(e) => {
+          // console.log("BOUNDS BELOW");
+          // console.log(coordinates);
           // console.log(e);
           setCoordinates({ lat: e.center.lat, lng: e.center.lng });
           setBounds({ ne: e.marginBounds.ne, sw: e.marginBounds.sw });
