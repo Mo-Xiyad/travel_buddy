@@ -11,7 +11,6 @@ import {
 
 import PlaceDetails from "../PlaceDetails/PlaceDetails";
 import useStyles from "./styles.js";
-import Loader from "../Loader/Loader";
 
 const List = ({
   places,
